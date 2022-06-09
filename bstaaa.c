@@ -2,7 +2,7 @@
 #include"BST.h"
 #include"TreePrintLibrary.h"
 
-#define TEST(op) do{if (op == NULL){printf("error");exit(1);}}while(0) //פונקצית מאקרו שבודקת האם ההקצאה הצליחה 
+#define TEST(op) do{if (op == NULL){printf("the malloc not sacecess");exit(1);}}while(0) //פונקצית מאקרו שבודקת האם ההקצאה הצליחה 
 
 void initBST(BST* bst)
 {
