@@ -2,7 +2,7 @@
 #include"BST.h"
 #include"TreePrintLibrary.h"
 
-#define TESTMALLOC(op) do{if (op == NULL){printf("error");exit(1);}}while(0) 
+#define TESTMALLOC(op) do{if (op == NULL){printf("malloc failed!!!");exit(1);}}while(0) 
 void initBST(BST* bst)
 {
 	bst->root = NULL;
