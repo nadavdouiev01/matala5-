@@ -2,8 +2,7 @@
 #include"BST.h"
 #include"TreePrintLibrary.h"
 
-#define TEST(op) do{if (op == NULL){printf("the malloc not sacecess");exit(1);}}while(0) //פונקצית מאקרו שבודקת האם ההקצאה הצליחה 
-
+#define TESTMALLOC(op) do{if (op == NULL){printf("error");exit(1);}}while(0) 
 void initBST(BST* bst)
 {
 	bst->root = NULL;
@@ -12,7 +11,7 @@ void initBST(BST* bst)
 TreeNode* NewNode(int value)  
 {
 	TreeNode* newNode = (TreeNode*)malloc(sizeof(TreeNode)); //פונקציה היוצרת משתנה 
-	TEST(&newNode);
+	TESTMALLOC(&newNode);
 	newNode->left = NULL;
 	newNode->right = NULL;
 	newNode->element = value;
@@ -28,19 +27,22 @@ void insertBST(BST* bst, int value) {  //  פונקציה המוסיפה את ההמשתנה לעץ הבינאר
 		InsTreeNode(bst->root, newNode); //אם הראש לא ריק יכניס לילדים שלו בהתאם לגודל המספר
 
 }
-void InsTreeNode(TreeNode* root, TreeNode* newNode) { //אם הראש לא ריק יכניס לילדים שלו בהתאם לגודל המספר
-	    if (newNode->element <= root->element)
-		if (root->left == NULL)
-			root->left = newNode;
-		else
+void InsTreeNode(TreeNode* root, TreeNode* newNode)  //אם הראש לא ריק יכניס לילדים שלו בהתאם לגודל המספר
+{
+	if (newNode->element <= root->element) {
+		if (root->left != NULL) {
 			InsTreeNode(root->left, newNode);
-	    if (newNode->element > root->element) {
-		if (root->right == NULL)
-			root->right = newNode;
-		else
-			InsTreeNode(root->right, newNode);
-	  }
-   }
+		}
+		else root->left = newNode;
+	}
+		if (newNode->element > root->element) {
+			if (root->right != NULL) {
+				InsTreeNode(root->right, newNode);
+			}
+			else	root->right = newNode;
+		}
+	}
+
 
 
 void printTreeInorder(BST* bst) //פונקציה הדפסת העץ 
@@ -59,9 +61,8 @@ void printTreeInorder(BST* bst) //פונקציה הדפסת העץ
 void printTNode(TreeNode* root) {  //   פונקצית הדפסת שורשים ימין ושמאל (רקורסיבית 
 	if (root != NULL)
 	{
-		printTNode(root->left);
 		printTNode(root->right);
-		
+		printTNode(root->left);
 	}
 }
 
@@ -73,9 +74,10 @@ int findIndexNFromLast(BST* bst, int N) {   //פונקציה המחזירה את הערך שבענף מספר
 
 int findINDEXFROMROOT(TreeNode* root, int N) {
 	if (root == NULL) {
-		return ;
+		return 0;
 	}
 	int X = 1+findINDEXFROMROOT(root->right, N);
+
 	if (X == N) {
 		return root->element;
 	}
@@ -84,24 +86,33 @@ int findINDEXFROMROOT(TreeNode* root, int N) {
 
 
 
-int sameHeightLeaves(BST* bst) { //פונקציה  הבודקת האם כל העלים בעץ בגובה זהה 
+int sameHeightLeaves(BST* bst){  //פונקציה  הבודקת האם כל העלים בעץ בגובה זהה 
 	int num = SameHEIGHT(bst->root);
 	return num;
 }
 
 int SameHEIGHT(TreeNode* root) {
-	if (root == NULL)
+	if (root == NULL) {
 		return 0;
-	int theleftside = 1+SameHEIGHT(root->left);
-	int therightside =1+SameHEIGHT(root->right);
+	}
+	int theleftside=1+SameHEIGHT(root->left);
+	int therightside=1+SameHEIGHT(root->right);
 	if (theleftside == therightside) {
 		return 1;
 	}
-	else
-
-		return NULL;
+	else return NULL;
 }
 
+
+
+
+void destroyBST(BST* bst) //פונקצית השמדת העץ
+{
+	if (bst->root == NULL) {
+		return;
+	}
+	 else freeTree(bst->root);
+}
 
 void freeTree(TreeNode* node)//שחרור זכרון 
 {
@@ -110,13 +121,6 @@ void freeTree(TreeNode* node)//שחרור זכרון
 		freeTree(node->right);
 		freeTree(node->left);
 		free(node);
+		printTreeInorder(node);
 	}
-}
-
-void destroyBST(BST* bst) //פונקצית השמדת העץ
-{
-	if (bst->root == NULL)
-		return;
-	else
-		freeTree(bst->root);
 }

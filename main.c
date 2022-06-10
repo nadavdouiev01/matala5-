@@ -50,5 +50,5 @@ void main()
 	/*print_ascii_tree(pointeroftree);*/
 
 	destroyBST(pointertotree);
-	printTreeInorder(pointertotree);
+	
 }
